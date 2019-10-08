@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+<input type="hidden" id="user_id" value="{{ user.id }}">
+<div class="jumbotron" style="margin: 20px">
+        <h1 class="display-3">Hello {{request.user}}</h1>
+        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+        <hr class="my-4">
+        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        <p class="lead">
+          <a class="btn btn-primary btn-lg" href="#" id="learn" role="button">Learn more</a>
+        </p>
+</div>
+
+<div class="row" style="margin: 20px">
+        <div class="col-lg-4">
+            <div class="card border-danger mb-3" style="max-width: 20rem;">
+                    <div class="card-header">Header</div>
+                    <div class="card-body">
+                      <h4 class="card-title">Primary card title</h4>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+                    </div>
+
+          </div>
+        </div>
+        <div class="col-lg-4">
+                  <div class="card border-warning mb-3" style="max-width: 20rem;">
+                    <div class="card-header">Header</div>
+                    <div class="card-body">
+                      <a href="#"><img  class="img-fluid"> </a>
+                  </div>
+                </div>
+        </div>
+        <div class="col-lg-4">
+
+                <div class="card border-success mb-3" style="max-width: 20rem;">
+                        <div class="card-header">
+                                {% if request.user.is_authenticated %}
+                                <h4>{{request.user}}'s Profile</h4>
+                                {% else %}
+                                <h4>Sign In</h4>
+                                {% endif %}
+                            </div>
+                          <div class="card-body">
+
+                                {% if request.user.is_authenticated %}
+                                <h3>///Text to be decided///</h3>
+                                {% else %}
+                                <form class="login" method="POST" action="#">
+                                    {% csrf_token %}
+
+
+                                  <div id="div_id_login" class="form-group"> <label for="id_login" class="control-label  requiredField">
+                                                  Login<span class="asteriskField">*</span> </label> <div class="controls "> <input type="text" name="login" placeholder="Username or e-mail" autofocus="autofocus" class="textinput textInput form-control" required="" id="id_login"> </div> </div> <div id="div_id_password" class="form-group"> <label for="id_password" class="control-label  requiredField">
+                                                  Password<span class="asteriskField">*</span> </label> <div class="controls "> <input type="password" name="password" placeholder="Password" class="textinput textInput form-control" required="" id="id_password"> </div> </div> <div class="form-group"> <div id="div_id_remember" class="checkbox"> <label for="id_remember" class=""> <input type="checkbox" name="remember" class="checkboxinput" id="id_remember">
+                                                      Remember Me
+                                                  </label> </div> </div>
+
+
+                                    <button class="primaryAction btn btn-outline-success" type="submit">Sign In</button>
+                                    <br>
+                                    <a class="button secondaryAction" href="#">Forgot Password?</a>
+                                    <p>If you have not created an account yet, then please
+                                            <a href="#">sign up</a> first.</p>
+                                </form>
+                                {% endif %}
+
+
+                        </div>
+                </div>
+        </div>
+</div>
+<div class="row cart" style="margin: 20px">
+
+</div>
+
+{% endblock %}

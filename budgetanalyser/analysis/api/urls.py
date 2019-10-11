@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import UpdateGoals, UserProfile,GetDashboardData,AddExpenditure,GetLiabilityList,AddIncome,GetGoalStatus,AddLiability
+from .views import UserProfile,GetDashboardData,AddExpenditure,GetLiabilityList,AddIncome,GetGoalStatus,AddLiability, UpdateGoals
 from rest_framework import routers
 
 # router = routers.DefaultRouter()
@@ -16,5 +16,5 @@ urlpatterns = [
     url('add_liability/', AddLiability.as_view(), name = 'add_liability'),
     url('liability-list/', GetLiabilityList.as_view(), name = 'liability_list'),
     url('goals/', GetGoalStatus.as_view(), name = 'goals'),
-    url('update_goals/', UpdateGoals.as_view(), name = 'update_goals')
+    url('update_goals/', UpdateGoals.as_view(), name = 'update_goals'),
 ]

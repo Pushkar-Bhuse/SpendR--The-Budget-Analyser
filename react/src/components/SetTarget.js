@@ -11,7 +11,8 @@ export class SetTarget extends Component {
 
         this.state = {
             expenditure: props.sliderData.expenditure,
-            saving: props.sliderData.saving
+            saving: props.sliderData.saving,
+            changed: []
         }
 
     }
@@ -29,6 +30,7 @@ export class SetTarget extends Component {
             for(var i in new_expenditure_list){
                 if(new_expenditure_list[i].liability.id === liability.liability.id){
                     new_expenditure_list[i].goal = value
+                    this.props.addChangedLiability(liability, value)
                 }
             }
             // console.log(new_expenditure_list)

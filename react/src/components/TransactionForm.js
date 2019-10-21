@@ -186,13 +186,13 @@ class TransactionForm extends React.Component {
 
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())}>
-            Log in
+          <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())} block>
+            Add Transaction
           </Button>
         </Form.Item>
         </Form>
 
-        <Button onClick={this.showDrawer}>Default</Button>
+        <Button onClick={this.showDrawer} block>Add Liability</Button>
         <Drawer
         title="Basic Drawer"
         placement="bottom"

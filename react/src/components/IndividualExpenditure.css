@@ -1,0 +1,19 @@
+/* .ant-carousel .slick-slide {
+  overflow: hidden;
+  height: 160px;
+  background: rgba(10, 79, 199, 0.29);
+}
+
+.ant-carousel .slick-slide div {
+  color: rgba(10, 79, 199, 0.29);
+} */
+
+.ant-carousel .slick-dots li button {
+  background: rgba(47, 55, 69, 0.5) !important
+}
+
+.slick-dots .slick-dots-bottom .active li button {
+  background: rgba(47, 55, 69, 0.5) !important
+}
+
+

@@ -1,11 +1,11 @@
-import { Carousel } from 'antd'
-import '../IndividualExpenditure.css'
+import { Carousel, Icon } from 'antd'
+// import '../IndividualExpenditure.css'
 import React, { Component } from 'react'
 import { BarChart } from './BarChart';
+import "./IndividualExpenditure.css"
 
 
 class IndividualExpenditure extends Component {
-
 
     render() {
         var dict = this.props.bar_chart_data_user
@@ -28,9 +28,9 @@ class IndividualExpenditure extends Component {
             {
                 return_arr.length === 0 ?
                 <h1>No money Spent</h1> :
-                <Carousel autoplay>
-                    { return_arr }
-                </Carousel>
+                    <Carousel autoplay>
+                        { return_arr }
+                    </Carousel>
             }
             </div>
         )
@@ -38,3 +38,5 @@ class IndividualExpenditure extends Component {
 }
 
 export default IndividualExpenditure
+
+

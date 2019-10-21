@@ -17,7 +17,7 @@ export class Goals extends Component {
 
     componentDidMount(){
         if(this.props.isAuthenticated){
-            // console.log("Goalss")
+            console.log("Goalss")
             axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
             axios.defaults.xsrfCookieName = "csrftoken";
             axios.defaults.headers = {
@@ -36,7 +36,7 @@ export class Goals extends Component {
         var progressRender = []
         if(this.state.data.income > 0){
             progressRender.push(
-                <Card style={{ width: "100%" }}>
+                <Card style={{ width: "100%", marginTop: "10px" }}>
                     <h2> My Savings </h2>
                     <Row>
                         <Col span = {8}>
@@ -64,7 +64,7 @@ export class Goals extends Component {
                 reality = (this.state.data.all_expenditures[goal_list[key].liability.id].amount / this.state.data.income)*100
 
                 progressRender.push(
-                    <Card style={{ width: "100%" }}>
+                    <Card style={{ width: "100%", marginTop: "10px" }}>
                         <h2> {liability} </h2>
                         <Row>
                             <Col span = {8}>

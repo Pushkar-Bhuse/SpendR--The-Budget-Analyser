@@ -77,6 +77,11 @@ class CustomLayout extends React.Component {
                         <Link to="/goals/">Goals</Link>
                     </Menu.Item>
 
+                    <Menu.Item style = {{ float:"right", paddingTop:"15px" }}>
+                        <Link to="/dashboard/"><h3 style={{ color:"#fff" }}>SpendR</h3></Link>
+                    </Menu.Item>
+
+
                 </Menu>
                 </Header>
                 <Content style={{ padding: '0 50px' }}>

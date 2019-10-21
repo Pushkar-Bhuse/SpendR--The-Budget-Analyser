@@ -16,7 +16,23 @@ export class BarChart extends Component {
                 labels: [monthNames[current_month%12],monthNames[(current_month - 1)%12],monthNames[(current_month - 2)%12],monthNames[(current_month - 3)%12],monthNames[(current_month - 4)%12]].reverse(),
                 datasets:[{
                     label: props.liability,
-                    data:props.data
+                    data:props.data,
+                    borderColor: [
+                        'rgba(2, 39, 105,0.5)',
+                        'rgba(97, 233, 251, 0.5)',
+                        'rgba(2, 39, 105,0.5)',
+                        'rgba(97, 233, 251, 0.5)',
+                        'rgba(2, 39, 105,0.5)',
+
+                    ],
+                    backgroundColor: [
+                        'rgba(2, 39, 105,0.5)',
+                        'rgba(97, 233, 251, 0.5)',
+                        'rgba(2, 39, 105,0.5)',
+                        'rgba(97, 233, 251, 0.5)',
+                        'rgba(2, 39, 105,0.5)'
+                    ],
+                    borderWidth: 1
                 }]
              }
         }
@@ -34,6 +50,7 @@ export class BarChart extends Component {
                     }}]
             }
         return (
+            <div style = {{marginBottom: "10px"}}>
             <Bar
                 data={this.state.data}
                 height={100}
@@ -49,6 +66,7 @@ export class BarChart extends Component {
 
                 //   }}
             />
+            </div>
         )
     }
 }

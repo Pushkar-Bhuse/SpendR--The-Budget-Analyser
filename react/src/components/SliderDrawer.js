@@ -20,7 +20,9 @@ class SliderDrawer extends React.Component {
       selected_items:[],
       allowSubmit:false,
       modal_visible:false,
-      alter_savings: false
+      alter_savings: false,
+      changed_liabilities: [],
+      direct_modal: false
     }
   }
 
@@ -29,13 +31,44 @@ class SliderDrawer extends React.Component {
       total_liability_spend: this.props.goal_list,
       first_list: this.props.goal_list,
       saving_goal : this.props.saving_goal
-    })
+    }, () => console.log(this.state.total_liability_spend))
+
   }
 
   showDrawer = () => {
     this.setState({
       visible: true,
     });
+  };
+
+  showSuccess = () => {
+
+    this.setState({
+      visible: false,
+      direct_modal: true,
+    }, () => {
+      axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+      axios.defaults.xsrfCookieName = "csrftoken";
+      axios.defaults.withCredentials = true;
+      axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: `Token ${localStorage.getItem('token')}`,
+      };
+      axios.post(`http://localhost:8000/api/update-goals/`, {
+          initial_setup: this.state.total_liability_spend,
+          selected_liability: [],
+          alter_savings: true,
+          new_savings: this.state.saving_goal
+      })
+      .then(function (response) {
+        console.log("Heloooooo")
+      })
+      .catch(function (error) {
+          // console.log(error);
+      });
+    });
+
+
   };
 
   onClose = () => {
@@ -56,28 +89,33 @@ class SliderDrawer extends React.Component {
     });
   };
 
+  addChangedLiability = (liability, value) => {
+
+  }
+
   onLeftoverDrawerSuccess = () => {
     var selectedItems = this.state.selected_items
     var difference = this.state.difference
     var i = 0
     var saving_goal = this.state.saving_goal
-    console.log(this.state.alter_savings)
-    console.log(selectedItems)
-    console.log(difference)
+    // console.log(this.state.alter_savings)
+    // console.log(selectedItems)
+    // console.log(difference)
     if(difference>0){
       if(this.state.alter_savings){
         while(difference !== 0){
           if(i === selectedItems.length){
             if(saving_goal > 0){
               saving_goal -= 1
+              difference -= 1
             }
           }
           else{
             if(selectedItems[i].goal > 0){
               selectedItems[i].goal = selectedItems[i].goal - 1
+              difference -= 1
             }
           }
-          difference -= 1
           i = (i+1) % (selectedItems.length+1)
         }
       }
@@ -85,8 +123,8 @@ class SliderDrawer extends React.Component {
         while(difference !== 0){
           if(selectedItems[i].goal > 0){
             selectedItems[i].goal = selectedItems[i].goal - 1
+            difference -= 1;
           }
-          difference -= 1;
           i = (i+1) % (selectedItems.length);
         }
       }
@@ -97,14 +135,16 @@ class SliderDrawer extends React.Component {
           if(i === selectedItems.length){
             if(saving_goal < 100){
               saving_goal += 1
+              difference += 1
             }
           }
           else{
             if(selectedItems[i].goal < 100){
               selectedItems[i].goal = selectedItems[i].goal + 1
+              difference += 1
             }
           }
-          difference += 1
+
           i = (i+1) % (selectedItems.length+1)
         }
       }
@@ -112,15 +152,16 @@ class SliderDrawer extends React.Component {
         while(difference !== 0){
           if(selectedItems[i].goal < 100){
             selectedItems[i].goal = selectedItems[i].goal + 1
+            difference += 1
           }
-          difference += 1
+
           i = (i+1) % selectedItems.length
         }
       }
     }
-    console.log(this.state.alter_savings)
-    console.log(selectedItems)
-    console.log(saving_goal)
+    // console.log(this.state.alter_savings)
+    // console.log(selectedItems)
+    // console.log(saving_goal)
     let alter_savings = this.state.alter_savings
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
@@ -129,7 +170,8 @@ class SliderDrawer extends React.Component {
     "Content-Type": "application/json",
     Authorization: `Token ${localStorage.getItem('token')}`,
     };
-    axios.post(`http://localhost:8000/api/update_goals/`, {
+    axios.post(`http://localhost:8000/api/update-goals/`, {
+        initial_setup: this.state.total_liability_spend,
         selected_liability: selectedItems,
         alter_savings: alter_savings,
         new_savings: saving_goal
@@ -137,7 +179,7 @@ class SliderDrawer extends React.Component {
     .then(function (response) {
         var data = response.data
         this.props.form.resetFields()
-        console.log(data)
+        console.log("In here")
     })
     .catch(function (error) {
         // console.log(error);
@@ -172,6 +214,7 @@ class SliderDrawer extends React.Component {
         diff += (final[i].goal)
     }
     diff = diff - 100
+    console.log(diff)
     this.setState({
       difference: diff
     })
@@ -191,10 +234,16 @@ class SliderDrawer extends React.Component {
     });
   }
 
-  handleOk = e => {
+  handleDirectOk = e => {
     this.setState({
       modal_visible: false,
-    });
+    }, () => window.location.reload());
+  }
+
+  handleOk = e => {
+    this.setState({
+      direct_modal: false,
+    }, () => window.location.reload());
   };
 
   render() {
@@ -217,10 +266,14 @@ class SliderDrawer extends React.Component {
       saving: this.state.saving_goal,
       expenditure: this.state.total_liability_spend
     }
-    first_drawer.push(<SetTarget TotalLiabilitySpend={this.TotalLiabilitySpend} sliderData = {set_target_dict} difference={this.state.difference}/>)
+    first_drawer.push(<SetTarget addChangedLiability={this.addChangedLiability} TotalLiabilitySpend={this.TotalLiabilitySpend} sliderData = {set_target_dict} difference={this.state.difference}/>)
     first_drawer.push(<Button type="primary" onClick={(this.state.difference != 0) ? this.showLeftoverDrawer : this.showSuccess}>
       Submit Request
     </Button>)
+    first_drawer.push(<div style = {{ marginBottom:"10px" }}>
+                        <p> If the goals you set are not realistic, you will be asked to allow alterations in a few of yor liabilities and savings</p>
+                        <p>--------------------------------</p>
+                      </div>)
 
     // else{
     //   first_drawer.push(<Spin indicator={antIcon} />)
@@ -234,17 +287,26 @@ class SliderDrawer extends React.Component {
           Alter Goals
         </Button>
         <Drawer
-          title="Multi-level drawer"
+          title="Alter Goals"
           width={520}
           closable={false}
           onClose={this.onClose}
           visible={this.state.visible}
         >
 
+        <div style = {{ marginBottom:"10px" }}>
           {first_drawer}
+        </div>
+        <Modal  title="Action Report"
+                visible={this.state.direct_modal}
+                onOk={this.handleDirectOk}>
+
+                Changes Saved Successfully...That too in one go !!
+
+        </Modal>
 
           <Drawer
-            title="Two-level Drawer"
+            title=""
             width={320}
             closable={false}
             onClose={this.onLeftoverDrawerClose}
@@ -259,7 +321,7 @@ class SliderDrawer extends React.Component {
             Go back
           </Button>
             <Modal
-              title="Basic Modal"
+              title="Action Report"
               visible={this.state.modal_visible}
               onOk={this.handleOk}
             >

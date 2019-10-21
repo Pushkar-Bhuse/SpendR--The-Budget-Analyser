@@ -13,6 +13,7 @@ from django.http import JsonResponse
 import json
 from .serializers import UserSerializer, GroupSerializer, LiabilitySerializer, IncomeSerializer
 from django.db.models import Sum
+from rest_framework import permissions
 
 # class SignUpView(CreateView):
 #     form_class = CustomUserCreationForm
@@ -79,6 +80,7 @@ class GetDashboardData(APIView):
                     Bar_Chart_Data_User[key] = [value]
 
         Distribution_of_Liabilities_User = user.get_expenditure_dict(datetime.now().month)
+        Distribution_of_Liabilities_User_Last_Month = user.get_expenditure_dict(datetime.now().month - 1 if datetime.now().month>1 else 12)
 
         Timeline_User = []
         last_seven_expenditures_user = Expenditure.objects.filter(user = user).order_by('-date')[:7]
@@ -97,6 +99,7 @@ class GetDashboardData(APIView):
                 "Income_User": Income_User,
                 "BarChartDataUser": Bar_Chart_Data_User,
                 "DistributionOfLiabilitiesUser": Distribution_of_Liabilities_User,
+                "DistributionOfLiabilitiesLastMonth": Distribution_of_Liabilities_User_Last_Month,
                 "TimelineUser": Timeline_User,
                 "GroupHead": False
         })
@@ -284,22 +287,23 @@ class GetGoalStatus(APIView):
         })
 
 class UpdateGoals(APIView):
+    permission_classes = (permissions.AllowAny,)
     def post(self, request, *args, **kwargs):
         user = request.user
         data = json.loads(request.body.decode('utf-8'))
-        selectedLiability = data['selectedLiability']
+        selectedLiability = data['selected_liability']
         alter_savings = data['alter_savings']
         new_savings = data['new_savings']
-        import pdb; pdb.set_trace()
+        initial_setup = data['initial_setup']
+        # import pdb; pdb.set_trace()
 
-        if(alter_savings):
-            instance = UserSavingsGoal.objects.filter(user = user, date__month = datetime.now().month)[0]
-            instance.percentage = new_savings
+        for item in initial_setup:
+            instance = UserGoal.objects.filter(user = user, liability__id = item['liability']['id'])[0]
+            instance.percentage = item['goal']
             instance.save()
 
-        for item in selectedLiability:
-            instance = UserGoal.objects.filter(user = user, liability__id = item.liability.id)[0]
-            instance.percentage = item.goal
+            instance = UserSavingsGoal.objects.filter(user = user, date__month = datetime.now().month)[0]
+            instance.percentage = new_savings
             instance.save()
 
         return Response({'sucess':True}, status = status.HTTP_200_OK)

@@ -13,7 +13,7 @@ class ChooseLeftover extends React.Component {
            selectedLiability:[],
            saving_index: null
     }
-    console.log(props.unchangedItems)
+    // console.log(props.unchangedItems)
   }
 
 
@@ -84,7 +84,7 @@ class ChooseLeftover extends React.Component {
 
     }
 
-    console.log(total_available)
+    // console.log(total_available)
 
     if(total_available >= Math.abs(this.state.difference)){
 

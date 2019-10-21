@@ -71,7 +71,7 @@ export class Dashboard extends Component {
                             </Card.Body>
                         </Card>
 
-                        <Card>
+                        <Card >
                             <Card.Header>
                             <Card.Title>Liability Expenditure Trend</Card.Title>
                             </Card.Header>
@@ -88,7 +88,7 @@ export class Dashboard extends Component {
                                 <Card.Title>Distribution of Liabilities This Month</Card.Title>
                             </Card.Header>
                             <Card.Body>
-                            <Percentage_Chart distribution_of_liabilities_user = { this.state.data.DistributionOfLiabilitiesUser } liability_map = { this.state.data.LiabilityMap }/>
+                            <Percentage_Chart distribution_of_liabilities_user = { this.state.data.DistributionOfLiabilitiesUser } distribution_of_liabilities_last_month = { this.state.data.DistributionOfLiabilitiesLastMonth } liability_map = { this.state.data.LiabilityMap }/>
                             </Card.Body>
                             </Card>
                         </Col>
